@@ -27,10 +27,13 @@
             --font-body: 'Plus Jakarta Sans', sans-serif;
         }
 
-        * {
+        *, *::before, *::after {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+        }
+
+        html {
             scroll-behavior: smooth;
         }
 
@@ -40,29 +43,33 @@
             font-family: var(--font-body);
             overflow-x: hidden;
             line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
         }
 
-        /* Ambient Glow Effect */
-        .bg-glow {
+        /* Ambient Glow Effect (Otimizado com Layer dedicado) */
+        .bg-glow, .bg-glow-2 {
             position: fixed;
+            border-radius: 50%;
+            z-index: -1;
+            pointer-events: none;
+            will-change: transform;
+            transform: translateZ(0);
+        }
+
+        .bg-glow {
             width: 500px;
             height: 500px;
             background: radial-gradient(circle, rgba(37, 99, 235, 0.15) 0%, rgba(0, 0, 0, 0) 70%);
             top: -120px;
             left: -120px;
-            z-index: -1;
-            pointer-events: none;
         }
 
         .bg-glow-2 {
-            position: fixed;
             width: 550px;
             height: 550px;
             background: radial-gradient(circle, rgba(6, 182, 212, 0.12) 0%, rgba(0, 0, 0, 0) 70%);
             bottom: -150px;
             right: -150px;
-            z-index: -1;
-            pointer-events: none;
         }
 
         /* --- HEADER & NAVBAR --- */
@@ -76,6 +83,7 @@
             align-items: center;
             background: rgba(5, 8, 17, 0.85);
             backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
             border-bottom: 1px solid rgba(255, 255, 255, 0.05);
             z-index: 1000;
         }
@@ -108,7 +116,7 @@
             text-decoration: none;
             font-size: 0.95rem;
             font-weight: 500;
-            transition: color 0.3s ease;
+            transition: color 0.2s ease;
         }
 
         nav a:hover {
@@ -129,16 +137,18 @@
             text-decoration: none;
             font-weight: 600;
             font-size: 0.9rem;
-            box-shadow: 0 0 20px rgba(37, 99, 235, 0.35);
-            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3);
+            transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s ease;
             display: inline-block;
             border: none;
             cursor: pointer;
+            will-change: transform;
+            backface-visibility: hidden;
         }
 
         .btn-cta:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 0 30px rgba(6, 182, 212, 0.55);
+            transform: translateY(-2px) scale(1.01);
+            box-shadow: 0 6px 20px rgba(6, 182, 212, 0.45);
         }
 
         .mobile-toggle {
@@ -207,7 +217,6 @@
             margin: 0 auto 2.5rem;
         }
 
-        /* Social Proof Badges */
         .hero-stats {
             display: flex;
             justify-content: center;
@@ -230,21 +239,22 @@
             margin: 0;
         }
 
-        /* --- ANIMAÇÕES GRINGAS (REVEAL) --- */
+        /* --- ANIMAÇÕES FLUIDAS (REVEAL GPU) --- */
         .reveal {
             opacity: 0;
-            transform: translateY(40px);
-            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+            transform: translateY(30px) translateZ(0);
+            will-change: transform, opacity;
+            transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.7s ease;
         }
 
         .reveal.active {
             opacity: 1;
-            transform: translateY(0);
+            transform: translateY(0) translateZ(0);
         }
 
-        .delay-1 { transition-delay: 0.1s; }
-        .delay-2 { transition-delay: 0.2s; }
-        .delay-3 { transition-delay: 0.3s; }
+        .delay-1 { transition-delay: 0.08s; }
+        .delay-2 { transition-delay: 0.16s; }
+        .delay-3 { transition-delay: 0.24s; }
 
         /* --- SEÇÕES EM GERAL --- */
         section {
@@ -283,20 +293,21 @@
             padding: 2.2rem;
             border-radius: 20px;
             backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
             position: relative;
-            transition: all 0.4s ease;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
+            will-change: transform;
+            transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s ease, box-shadow 0.3s ease;
         }
 
         .service-card:hover {
             border-color: var(--blue-glow);
-            transform: translateY(-6px);
-            box-shadow: 0 12px 35px rgba(37, 99, 235, 0.18);
+            transform: translateY(-5px) translateZ(0);
+            box-shadow: 0 10px 25px rgba(37, 99, 235, 0.15);
         }
 
-        /* Highlight Popular Card */
         .service-card.popular {
             border: 2px solid var(--blue-primary);
             background: rgba(37, 99, 235, 0.08);
@@ -352,7 +363,7 @@
             display: inline-flex;
             align-items: center;
             gap: 5px;
-            transition: gap 0.3s ease;
+            transition: gap 0.25s ease, color 0.25s ease;
         }
 
         .service-btn:hover {
@@ -373,13 +384,16 @@
             overflow: hidden;
             height: 340px;
             border: 1px solid var(--border);
+            transform: translateZ(0);
         }
 
         .gallery-item img {
             width: 100%;
             height: 100%;
             object-fit: cover;
-            transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+            will-change: transform;
+            transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            backface-visibility: hidden;
         }
 
         .gallery-overlay {
@@ -391,10 +405,11 @@
             padding: 1.5rem;
             opacity: 0;
             transition: opacity 0.3s ease;
+            will-change: opacity;
         }
 
         .gallery-item:hover img {
-            transform: scale(1.08);
+            transform: scale(1.06);
         }
 
         .gallery-item:hover .gallery-overlay {
@@ -407,7 +422,7 @@
             color: #fff;
         }
 
-        /* --- FAQ SECTION --- */
+        /* --- FAQ SECTION (OTIMIZADO COM GRID LAYOUT) --- */
         .faq-container {
             max-width: 800px;
             margin: 0 auto;
@@ -422,7 +437,7 @@
             border-radius: 14px;
             padding: 1.2rem 1.5rem;
             cursor: pointer;
-            transition: border-color 0.3s ease;
+            transition: border-color 0.25s ease;
         }
 
         .faq-item:hover {
@@ -438,22 +453,32 @@
             color: #fff;
         }
 
-        .faq-answer {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.4s ease, margin-top 0.3s ease;
-            color: var(--text-muted);
-            font-size: 0.95rem;
+        .faq-answer-wrapper {
+            display: grid;
+            grid-template-rows: 0fr;
+            transition: grid-template-rows 0.35s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        .faq-item.active .faq-answer {
-            max-height: 200px;
-            margin-top: 1rem;
+        .faq-answer-content {
+            overflow: hidden;
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            padding-top: 0;
+            transition: padding-top 0.35s ease;
+        }
+
+        .faq-item.active .faq-answer-wrapper {
+            grid-template-rows: 1fr;
+        }
+
+        .faq-item.active .faq-answer-content {
+            padding-top: 1rem;
         }
 
         .faq-icon {
             font-size: 1.2rem;
-            transition: transform 0.3s ease;
+            will-change: transform;
+            transition: transform 0.3s ease, color 0.3s ease;
         }
 
         .faq-item.active .faq-icon {
@@ -522,18 +547,20 @@
             align-items: center;
             justify-content: center;
             text-decoration: none;
-            box-shadow: 0 10px 25px rgba(37, 211, 102, 0.4);
+            box-shadow: 0 8px 20px rgba(37, 211, 102, 0.35);
             z-index: 999;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            animation: pulse 2s infinite;
+            will-change: transform;
+            transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s ease;
+            animation: pulse 2.5s infinite;
+            backface-visibility: hidden;
         }
 
         @keyframes pulse {
             0% {
-                box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.6);
+                box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.5);
             }
             70% {
-                box-shadow: 0 0 0 15px rgba(37, 211, 102, 0);
+                box-shadow: 0 0 0 14px rgba(37, 211, 102, 0);
             }
             100% {
                 box-shadow: 0 0 0 0 rgba(37, 211, 102, 0);
@@ -541,8 +568,8 @@
         }
 
         .float-whatsapp:hover {
-            transform: scale(1.1);
-            box-shadow: 0 15px 30px rgba(37, 211, 102, 0.6);
+            transform: scale(1.08) translateZ(0);
+            box-shadow: 0 12px 25px rgba(37, 211, 102, 0.5);
         }
 
         .float-whatsapp svg {
@@ -560,7 +587,7 @@
             font-size: 0.88rem;
         }
 
-        /* --- RESPONSIVIDADE --- */
+        /* --- RESPONSIVIDADE & MENU MOBILE --- */
         @media (max-width: 900px) {
             .location-container { grid-template-columns: 1fr; padding: 1.5rem; }
             .hero-stats { gap: 1.5rem; }
@@ -574,13 +601,20 @@
                 width: 100%;
                 background: rgba(5, 8, 17, 0.98);
                 backdrop-filter: blur(20px);
+                -webkit-backdrop-filter: blur(20px);
                 border-bottom: 1px solid var(--border);
                 padding: 2rem;
-                display: none;
+                opacity: 0;
+                pointer-events: none;
+                transform: translateY(-10px);
+                will-change: transform, opacity;
+                transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
             }
 
             nav.active {
-                display: block;
+                opacity: 1;
+                pointer-events: auto;
+                transform: translateY(0);
             }
 
             nav ul {
@@ -612,15 +646,15 @@
         
         <nav id="nav-menu">
             <ul>
-                <li><a href="#servicos" onclick="toggleMenu()">Serviços</a></li>
-                <li><a href="#galeria" onclick="toggleMenu()">Cortes</a></li>
-                <li><a href="#faq" onclick="toggleMenu()">Dúvidas</a></li>
-                <li><a href="#localizacao" onclick="toggleMenu()">Localização</a></li>
+                <li><a href="#servicos" onclick="closeMenu()">Serviços</a></li>
+                <li><a href="#galeria" onclick="closeMenu()">Cortes</a></li>
+                <li><a href="#faq" onclick="closeMenu()">Dúvidas</a></li>
+                <li><a href="#localizacao" onclick="closeMenu()">Localização</a></li>
             </ul>
         </nav>
 
         <div class="header-actions">
-            <a href="https://wa.me/5500000000000" target="_blank" class="btn-cta header-cta">Agendar Horário</a>
+            <a href="https://wa.me/5500000000000" target="_blank" rel="noopener" class="btn-cta header-cta">Agendar Horário</a>
             <button class="mobile-toggle" onclick="toggleMenu()" aria-label="Abrir Menu">☰</button>
         </div>
     </header>
@@ -634,7 +668,7 @@
             </div>
             <h1>A excelência em cada detalhe do seu estilo.</h1>
             <p>Na DEMO BARBER, alinhar o seu visual vai além do corte. Combinamos técnicas avançadas de visagismo com um ambiente exclusivo para homens de alto padrão.</p>
-            <a href="https://wa.me/5500000000000" target="_blank" class="btn-cta" style="padding: 1rem 2.5rem; font-size: 1rem;">Garantir Meu Horário Exclusivo</a>
+            <a href="https://wa.me/5500000000000" target="_blank" rel="noopener" class="btn-cta" style="padding: 1rem 2.5rem; font-size: 1rem;">Garantir Meu Horário Exclusivo</a>
 
             <!-- Social Proof -->
             <div class="hero-stats">
@@ -668,7 +702,7 @@
                     <span class="service-price">R$ 70</span>
                 </div>
                 <p class="service-desc">Consultoria de visagismo facial, lavagem especial com shampoo mentolado, corte preciso e finalização personalizada.</p>
-                <a href="https://wa.me/5500000000000?text=Olá,%20quero%20agendar%20um%20Corte%20Executive%20na%20DEMO%20BARBER" target="_blank" class="service-btn">Agendar este serviço →</a>
+                <a href="https://wa.me/5500000000000?text=Olá,%20quero%20agendar%20um%20Corte%20Executive%20na%20DEMO%20BARBER" target="_blank" rel="noopener" class="service-btn">Agendar este serviço →</a>
             </div>
 
             <!-- Card Destaque Popular -->
@@ -679,7 +713,7 @@
                     <span class="service-price">R$ 110</span>
                 </div>
                 <p class="service-desc">A experiência completa: Corte Executive + Barba Terapia completa com toalha quente e óleos essenciais.</p>
-                <a href="https://wa.me/5500000000000?text=Olá,%20quero%20agendar%20o%20Combo%20DEMO%20na%20DEMO%20BARBER" target="_blank" class="service-btn">Agendar Experiência Completa →</a>
+                <a href="https://wa.me/5500000000000?text=Olá,%20quero%20agendar%20o%20Combo%20DEMO%20na%20DEMO%20BARBER" target="_blank" rel="noopener" class="service-btn">Agendar Experiência Completa →</a>
             </div>
 
             <div class="service-card reveal delay-3">
@@ -688,7 +722,7 @@
                     <span class="service-price">R$ 55</span>
                 </div>
                 <p class="service-desc">Modelagem e alinhamento com toalha quente, massagem facial e hidratação profunda dos fios.</p>
-                <a href="https://wa.me/5500000000000?text=Olá,%20quero%20agendar%20uma%20Barba%20Terapia%20na%20DEMO%20BARBER" target="_blank" class="service-btn">Agendar este serviço →</a>
+                <a href="https://wa.me/5500000000000?text=Olá,%20quero%20agendar%20uma%20Barba%20Terapia%20na%20DEMO%20BARBER" target="_blank" rel="noopener" class="service-btn">Agendar este serviço →</a>
             </div>
 
             <div class="service-card reveal delay-1">
@@ -697,7 +731,7 @@
                     <span class="service-price">R$ 30</span>
                 </div>
                 <p class="service-desc">Manutenção rápida dos contornos do cabelo e nuca para manter o visual limpo no dia a dia.</p>
-                <a href="https://wa.me/5500000000000?text=Olá,%20quero%20agendar%20um%20Pezinho%20na%20DEMO%20BARBER" target="_blank" class="service-btn">Agendar este serviço →</a>
+                <a href="https://wa.me/5500000000000?text=Olá,%20quero%20agendar%20um%20Pezinho%20na%20DEMO%20BARBER" target="_blank" rel="noopener" class="service-btn">Agendar este serviço →</a>
             </div>
 
             <div class="service-card reveal delay-2">
@@ -706,7 +740,7 @@
                     <span class="service-price">R$ 25</span>
                 </div>
                 <p class="service-desc">Alinhamento e limpeza sutil da sobrancelha na navalha mantendo o aspecto masculino natural.</p>
-                <a href="https://wa.me/5500000000000?text=Olá,%20quero%20agendar%20Design%20de%20Sobrancelha%20na%20DEMO%20BARBER" target="_blank" class="service-btn">Agendar este serviço →</a>
+                <a href="https://wa.me/5500000000000?text=Olá,%20quero%20agendar%20Design%20de%20Sobrancelha%20na%20DEMO%20BARBER" target="_blank" rel="noopener" class="service-btn">Agendar este serviço →</a>
             </div>
 
             <div class="service-card reveal delay-3">
@@ -715,7 +749,7 @@
                     <span class="service-price">R$ 90</span>
                 </div>
                 <p class="service-desc">Disfarce natural de fios brancos ou tratamento de alinhamento e redução de frizz para os cabelos.</p>
-                <a href="https://wa.me/5500000000000?text=Olá,%20quero%20agendar%20Selagem/Camuflagem%20na%20DEMO%20BARBER" target="_blank" class="service-btn">Agendar este serviço →</a>
+                <a href="https://wa.me/5500000000000?text=Olá,%20quero%20agendar%20Selagem/Camuflagem%20na%20DEMO%20BARBER" target="_blank" rel="noopener" class="service-btn">Agendar este serviço →</a>
             </div>
         </div>
     </section>
@@ -729,28 +763,28 @@
 
         <div class="gallery-grid">
             <div class="gallery-item reveal delay-1">
-                <img src="https://images.unsplash.com/photo-1503951914875-452162b0f3f1?auto=format&fit=crop&q=80&w=600" alt="Mid Fade Texturizado">
+                <img src="https://images.unsplash.com/photo-1503951914875-452162b0f3f1?auto=format&fit=crop&q=80&w=600" alt="Mid Fade Texturizado" loading="lazy">
                 <div class="gallery-overlay">
                     <span class="gallery-tag">Mid Fade & Crop Texturizado</span>
                 </div>
             </div>
 
             <div class="gallery-item reveal delay-2">
-                <img src="https://images.unsplash.com/photo-1622286342621-4bd786c2447c?auto=format&fit=crop&q=80&w=600" alt="Barba Terapia DEMO">
+                <img src="https://images.unsplash.com/photo-1622286342621-4bd786c2447c?auto=format&fit=crop&q=80&w=600" alt="Barba Terapia DEMO" loading="lazy">
                 <div class="gallery-overlay">
                     <span class="gallery-tag">Barba Esculpida & Alinhada</span>
                 </div>
             </div>
 
             <div class="gallery-item reveal delay-3">
-                <img src="https://images.unsplash.com/photo-1599351431202-1e0f0137899a?auto=format&fit=crop&q=80&w=600" alt="Corte Executivo Classico">
+                <img src="https://images.unsplash.com/photo-1599351431202-1e0f0137899a?auto=format&fit=crop&q=80&w=600" alt="Corte Executivo Classico" loading="lazy">
                 <div class="gallery-overlay">
                     <span class="gallery-tag">Executive Side Part</span>
                 </div>
             </div>
 
             <div class="gallery-item reveal delay-1">
-                <img src="https://images.unsplash.com/photo-1605497788044-5a32c7078486?auto=format&fit=crop&q=80&w=600" alt="Low Fade Sutil">
+                <img src="https://images.unsplash.com/photo-1605497788044-5a32c7078486?auto=format&fit=crop&q=80&w=600" alt="Low Fade Sutil" loading="lazy">
                 <div class="gallery-overlay">
                     <span class="gallery-tag">Low Taper Fade Moderno</span>
                 </div>
@@ -771,8 +805,10 @@
                     <span>Preciso agendar horário ou posso ir direto?</span>
                     <span class="faq-icon">+</span>
                 </div>
-                <div class="faq-answer">
-                    Trabalhamos prioritariamente com agendamento para garantir um atendimento pontual e sem filas. No entanto, se houver disponibilidade no momento, também atendemos por ordem de chegada.
+                <div class="faq-answer-wrapper">
+                    <div class="faq-answer-content">
+                        Trabalhamos prioritariamente com agendamento para garantir um atendimento pontual e sem filas. No entanto, se houver disponibilidade no momento, também atendemos por ordem de chegada.
+                    </div>
                 </div>
             </div>
 
@@ -781,8 +817,10 @@
                     <span>Quais são as formas de pagamento aceitas?</span>
                     <span class="faq-icon">+</span>
                 </div>
-                <div class="faq-answer">
-                    Aceitamos PIX, cartões de crédito e débito (todas as bandeiras), além de pagamento em dinheiro.
+                <div class="faq-answer-wrapper">
+                    <div class="faq-answer-content">
+                        Aceitamos PIX, cartões de crédito e débito (todas as bandeiras), além de pagamento em dinheiro.
+                    </div>
                 </div>
             </div>
 
@@ -791,8 +829,10 @@
                     <span>A DEMO BARBER possui estacionamento?</span>
                     <span class="faq-icon">+</span>
                 </div>
-                <div class="faq-answer">
-                    Sim! Contamos com convênio de estacionamento gratuito para clientes logo ao lado da unidade.
+                <div class="faq-answer-wrapper">
+                    <div class="faq-answer-content">
+                        Sim! Contamos com convênio de estacionamento gratuito para clientes logo ao lado da unidade.
+                    </div>
                 </div>
             </div>
         </div>
@@ -823,7 +863,7 @@
                 </div>
 
                 <div>
-                    <a href="https://maps.google.com" target="_blank" class="btn-cta" style="border-radius: 12px; font-size: 0.88rem;">Traçar Rota no Google Maps</a>
+                    <a href="https://maps.google.com" target="_blank" rel="noopener" class="btn-cta" style="border-radius: 12px; font-size: 0.88rem;">Traçar Rota no Google Maps</a>
                 </div>
             </div>
 
@@ -834,7 +874,7 @@
     </section>
 
     <!-- FLOATING WHATSAPP BUTTON -->
-    <a href="https://wa.me/5500000000000" target="_blank" class="float-whatsapp" aria-label="Agendar via WhatsApp">
+    <a href="https://wa.me/5500000000000" target="_blank" rel="noopener" class="float-whatsapp" aria-label="Agendar via WhatsApp">
         <svg viewBox="0 0 32 32">
             <path d="M16 2a13.9 13.9 0 0 0-12 21l-2 7.3 7.5-2a13.9 13.9 0 1 0 6.5-26.3zm0 25.5a11.5 11.5 0 0 1-5.9-1.6l-.4-.2-4.4 1.2 1.2-4.3-.3-.4a11.6 11.6 0 1 1 9.8 5.3zm6.4-8.6c-.3-.2-2-.1-2.3-1.1s-.6-.8-.8-.8h-.7a1.4 1.4 0 0 0-1 .5 5.8 5.8 0 0 0-1.8 4.3 6.8 6.8 0 0 0 1.4 3.7c1.7 2.2 4 3.4 6.5 4.1 2.6.7 3.2.5 3.8.4a3.2 3.2 0 0 0 2.2-1.5 2.7 2.7 0 0 0 .2-1.5c-.1-.2-.4-.3-.8-.5z"/>
         </svg>
@@ -847,16 +887,19 @@
 
     <!-- SCRIPTS LEVES DE INTERAÇÃO -->
     <script>
-        // Animação de Scroll (IntersectionObserver)
         document.addEventListener('DOMContentLoaded', () => {
+            // Observer configurado para não reagir a pequenas rolagens falsas
             const observerOptions = {
-                threshold: 0.12
+                root: null,
+                rootMargin: '0px',
+                threshold: 0.15
             };
 
-            const observer = new IntersectionObserver((entries) => {
+            const observer = new IntersectionObserver((entries, obs) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
                         entry.target.classList.add('active');
+                        obs.unobserve(entry.target); // Para de observar após animar (economiza CPU)
                     }
                 });
             }, observerOptions);
@@ -864,10 +907,14 @@
             document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
         });
 
-        // Toggle do Menu Mobile
+        // Alternar Menu Mobile
+        const navMenu = document.getElementById('nav-menu');
         function toggleMenu() {
-            const nav = document.getElementById('nav-menu');
-            nav.classList.toggle('active');
+            navMenu.classList.toggle('active');
+        }
+
+        function closeMenu() {
+            navMenu.classList.remove('active');
         }
 
         // Toggle do FAQ Accordion
