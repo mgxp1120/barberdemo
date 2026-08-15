@@ -1,926 +1,637 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-BR" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="#050811">
-    <meta name="description" content="DEMO BARBER - A melhor experiência em cortes, barba e visagismo masculino. Design premium e atendimento exclusivo.">
-    <title>DEMO BARBER | Experiência Premium</title>
+    <title>Barbearia Imperio | Experiência & Estilo Masculino</title>
+    <meta name="description" content="Barbearia premium especializada em cortes clássicos e modernos, barba com toalha quente e atendimento exclusivo. Agende seu horário.">
     
-    <!-- Google Fonts: Syne & Plus Jakarta Sans -->
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            gold: '#D4AF37',
+                            amber: '#CC7722',
+                            dark: '#0A0A0A',
+                            surface: '#121212',
+                            card: '#1A1A1A'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        heading: ['Cinzel', 'serif']
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- Fonts & Icons -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
     
+    <!-- AOS Animation Library -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
     <style>
-        /* --- VARIÁVEIS E RESET --- */
-        :root {
-            --bg-dark: #050811;
-            --bg-card: rgba(15, 23, 42, 0.65);
-            --blue-primary: #2563eb;
-            --blue-glow: #3b82f6;
-            --blue-cyan: #06b6d4;
-            --text-main: #f8fafc;
-            --text-muted: #94a3b8;
-            --border: rgba(59, 130, 246, 0.2);
-            --font-title: 'Syne', sans-serif;
-            --font-body: 'Plus Jakarta Sans', sans-serif;
-        }
-
-        *, *::before, *::after {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        html {
-            scroll-behavior: smooth;
-        }
-
-        body {
-            background-color: var(--bg-dark);
-            color: var(--text-main);
-            font-family: var(--font-body);
-            overflow-x: hidden;
-            line-height: 1.6;
-            -webkit-font-smoothing: antialiased;
-        }
-
-        /* Ambient Glow Effect (Otimizado com Layer dedicado) */
-        .bg-glow, .bg-glow-2 {
-            position: fixed;
-            border-radius: 50%;
-            z-index: -1;
-            pointer-events: none;
-            will-change: transform;
-            transform: translateZ(0);
-        }
-
-        .bg-glow {
-            width: 500px;
-            height: 500px;
-            background: radial-gradient(circle, rgba(37, 99, 235, 0.15) 0%, rgba(0, 0, 0, 0) 70%);
-            top: -120px;
-            left: -120px;
-        }
-
-        .bg-glow-2 {
-            width: 550px;
-            height: 550px;
-            background: radial-gradient(circle, rgba(6, 182, 212, 0.12) 0%, rgba(0, 0, 0, 0) 70%);
-            bottom: -150px;
-            right: -150px;
-        }
-
-        /* --- HEADER & NAVBAR --- */
-        header {
-            position: fixed;
-            top: 0;
-            width: 100%;
-            padding: 1.2rem 6%;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: rgba(5, 8, 17, 0.85);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-            z-index: 1000;
-        }
-
-        .logo {
-            font-family: var(--font-title);
-            font-size: 1.6rem;
-            font-weight: 800;
-            letter-spacing: -0.5px;
-            color: #fff;
-            text-transform: uppercase;
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            gap: 4px;
-        }
-
-        .logo span {
-            color: var(--blue-cyan);
-        }
-
-        nav ul {
-            display: flex;
-            list-style: none;
-            gap: 2.2rem;
-        }
-
-        nav a {
-            color: var(--text-muted);
-            text-decoration: none;
-            font-size: 0.95rem;
-            font-weight: 500;
-            transition: color 0.2s ease;
-        }
-
-        nav a:hover {
-            color: var(--blue-glow);
-        }
-
-        .header-actions {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .btn-cta {
-            background: linear-gradient(135deg, var(--blue-primary), var(--blue-cyan));
-            color: #fff;
-            padding: 0.75rem 1.6rem;
-            border-radius: 50px;
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 0.9rem;
-            box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3);
-            transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s ease;
-            display: inline-block;
-            border: none;
-            cursor: pointer;
-            will-change: transform;
-            backface-visibility: hidden;
-        }
-
-        .btn-cta:hover {
-            transform: translateY(-2px) scale(1.01);
-            box-shadow: 0 6px 20px rgba(6, 182, 212, 0.45);
-        }
-
-        .mobile-toggle {
-            display: none;
-            background: none;
-            border: none;
-            color: #fff;
-            font-size: 1.8rem;
-            cursor: pointer;
-        }
-
-        /* --- HERO SECTION --- */
-        .hero {
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 9rem 6% 4rem;
-            text-align: center;
-            position: relative;
-        }
-
-        .hero-content {
-            max-width: 850px;
-        }
-
-        .badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 0.4rem 1.2rem;
-            background: rgba(37, 99, 235, 0.1);
-            border: 1px solid var(--border);
-            border-radius: 30px;
-            color: var(--blue-cyan);
-            font-size: 0.85rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 1.8rem;
-        }
-
-        .badge-dot {
-            width: 8px;
-            height: 8px;
-            background: var(--blue-cyan);
-            border-radius: 50%;
-            box-shadow: 0 0 10px var(--blue-cyan);
-        }
-
-        .hero h1 {
-            font-family: var(--font-title);
-            font-size: clamp(2.6rem, 6.5vw, 4.8rem);
-            line-height: 1.05;
-            margin-bottom: 1.5rem;
-            background: linear-gradient(to bottom, #ffffff 50%, #94a3b8);
+        .gold-gradient-text {
+            background: linear-gradient(135deg, #F3E5AB 0%, #D4AF37 50%, #CC7722 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            font-weight: 800;
         }
-
-        .hero p {
-            font-size: 1.15rem;
-            color: var(--text-muted);
-            max-width: 620px;
-            margin: 0 auto 2.5rem;
+        .gold-gradient-bg {
+            background: linear-gradient(135deg, #D4AF37 0%, #CC7722 100%);
         }
-
-        .hero-stats {
-            display: flex;
-            justify-content: center;
-            gap: 3rem;
-            margin-top: 3.5rem;
-            padding-top: 2rem;
-            border-top: 1px solid rgba(255, 255, 255, 0.08);
-            flex-wrap: wrap;
+        .gold-border-hover {
+            transition: all 0.3s ease;
         }
-
-        .stat-item h3 {
-            font-family: var(--font-title);
-            font-size: 1.8rem;
-            color: #fff;
-        }
-
-        .stat-item p {
-            font-size: 0.85rem;
-            color: var(--text-muted);
-            margin: 0;
-        }
-
-        /* --- ANIMAÇÕES FLUIDAS (REVEAL GPU) --- */
-        .reveal {
-            opacity: 0;
-            transform: translateY(30px) translateZ(0);
-            will-change: transform, opacity;
-            transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.7s ease;
-        }
-
-        .reveal.active {
-            opacity: 1;
-            transform: translateY(0) translateZ(0);
-        }
-
-        .delay-1 { transition-delay: 0.08s; }
-        .delay-2 { transition-delay: 0.16s; }
-        .delay-3 { transition-delay: 0.24s; }
-
-        /* --- SEÇÕES EM GERAL --- */
-        section {
-            padding: 6rem 6%;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .section-header {
-            text-align: center;
-            margin-bottom: 4rem;
-        }
-
-        .section-header h2 {
-            font-family: var(--font-title);
-            font-size: 2.4rem;
-            margin-bottom: 0.5rem;
-            color: #fff;
-        }
-
-        .section-header p {
-            color: var(--text-muted);
-            font-size: 1rem;
-        }
-
-        /* --- PREÇOS / SERVIÇOS --- */
-        .services-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 1.8rem;
-        }
-
-        .service-card {
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            padding: 2.2rem;
-            border-radius: 20px;
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            position: relative;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            will-change: transform;
-            transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        .service-card:hover {
-            border-color: var(--blue-glow);
-            transform: translateY(-5px) translateZ(0);
-            box-shadow: 0 10px 25px rgba(37, 99, 235, 0.15);
-        }
-
-        .service-card.popular {
-            border: 2px solid var(--blue-primary);
-            background: rgba(37, 99, 235, 0.08);
-        }
-
-        .popular-badge {
-            position: absolute;
-            top: -12px;
-            right: 20px;
-            background: linear-gradient(135deg, var(--blue-primary), var(--blue-cyan));
-            color: #fff;
-            font-size: 0.75rem;
-            font-weight: 700;
-            padding: 0.25rem 0.8rem;
-            border-radius: 20px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .service-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: baseline;
-            margin-bottom: 1rem;
-            border-bottom: 1px dashed rgba(255, 255, 255, 0.1);
-            padding-bottom: 1rem;
-        }
-
-        .service-title {
-            font-size: 1.3rem;
-            font-weight: 700;
-            color: #fff;
-        }
-
-        .service-price {
-            font-family: var(--font-title);
-            font-size: 1.5rem;
-            color: var(--blue-cyan);
-            font-weight: 800;
-        }
-
-        .service-desc {
-            color: var(--text-muted);
-            font-size: 0.92rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .service-btn {
-            color: var(--blue-glow);
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 0.88rem;
-            display: inline-flex;
-            align-items: center;
-            gap: 5px;
-            transition: gap 0.25s ease, color 0.25s ease;
-        }
-
-        .service-btn:hover {
-            gap: 10px;
-            color: #fff;
-        }
-
-        /* --- GALERIA --- */
-        .gallery-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-            gap: 1.5rem;
-        }
-
-        .gallery-item {
-            position: relative;
-            border-radius: 18px;
-            overflow: hidden;
-            height: 340px;
-            border: 1px solid var(--border);
-            transform: translateZ(0);
-        }
-
-        .gallery-item img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            will-change: transform;
-            transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-            backface-visibility: hidden;
-        }
-
-        .gallery-overlay {
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(to top, rgba(5, 8, 17, 0.95), transparent 60%);
-            display: flex;
-            align-items: flex-end;
-            padding: 1.5rem;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-            will-change: opacity;
-        }
-
-        .gallery-item:hover img {
-            transform: scale(1.06);
-        }
-
-        .gallery-item:hover .gallery-overlay {
-            opacity: 1;
-        }
-
-        .gallery-tag {
-            font-size: 1.05rem;
-            font-weight: 700;
-            color: #fff;
-        }
-
-        /* --- FAQ SECTION (OTIMIZADO COM GRID LAYOUT) --- */
-        .faq-container {
-            max-width: 800px;
-            margin: 0 auto;
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-        }
-
-        .faq-item {
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: 14px;
-            padding: 1.2rem 1.5rem;
-            cursor: pointer;
-            transition: border-color 0.25s ease;
-        }
-
-        .faq-item:hover {
-            border-color: var(--blue-glow);
-        }
-
-        .faq-question {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-weight: 600;
-            font-size: 1.05rem;
-            color: #fff;
-        }
-
-        .faq-answer-wrapper {
-            display: grid;
-            grid-template-rows: 0fr;
-            transition: grid-template-rows 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        .faq-answer-content {
-            overflow: hidden;
-            color: var(--text-muted);
-            font-size: 0.95rem;
-            padding-top: 0;
-            transition: padding-top 0.35s ease;
-        }
-
-        .faq-item.active .faq-answer-wrapper {
-            grid-template-rows: 1fr;
-        }
-
-        .faq-item.active .faq-answer-content {
-            padding-top: 1rem;
-        }
-
-        .faq-icon {
-            font-size: 1.2rem;
-            will-change: transform;
-            transition: transform 0.3s ease, color 0.3s ease;
-        }
-
-        .faq-item.active .faq-icon {
-            transform: rotate(45deg);
-            color: var(--blue-cyan);
-        }
-
-        /* --- LOCALIZAÇÃO --- */
-        .location-container {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 2.5rem;
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: 24px;
-            overflow: hidden;
-            padding: 2.5rem;
-        }
-
-        .location-info {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            gap: 1.8rem;
-        }
-
-        .info-box h4 {
-            color: var(--blue-cyan);
-            font-size: 0.85rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 0.4rem;
-        }
-
-        .info-box p {
-            font-size: 1.05rem;
-            color: var(--text-main);
-        }
-
-        .map-wrapper {
-            width: 100%;
-            min-height: 320px;
-            border-radius: 18px;
-            overflow: hidden;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .map-wrapper iframe {
-            width: 100%;
-            height: 100%;
-            border: 0;
-            filter: invert(90%) hue-rotate(180deg) contrast(100%);
-        }
-
-        /* --- FLOATING WHATSAPP BUTTON --- */
-        .float-whatsapp {
-            position: fixed;
-            bottom: 25px;
-            right: 25px;
-            width: 60px;
-            height: 60px;
-            background-color: #25d366;
-            color: #fff;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-decoration: none;
-            box-shadow: 0 8px 20px rgba(37, 211, 102, 0.35);
-            z-index: 999;
-            will-change: transform;
-            transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s ease;
-            animation: pulse 2.5s infinite;
-            backface-visibility: hidden;
-        }
-
-        @keyframes pulse {
-            0% {
-                box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.5);
-            }
-            70% {
-                box-shadow: 0 0 0 14px rgba(37, 211, 102, 0);
-            }
-            100% {
-                box-shadow: 0 0 0 0 rgba(37, 211, 102, 0);
-            }
-        }
-
-        .float-whatsapp:hover {
-            transform: scale(1.08) translateZ(0);
-            box-shadow: 0 12px 25px rgba(37, 211, 102, 0.5);
-        }
-
-        .float-whatsapp svg {
-            width: 32px;
-            height: 32px;
-            fill: currentColor;
-        }
-
-        /* --- FOOTER --- */
-        footer {
-            text-align: center;
-            padding: 3rem 6%;
-            border-top: 1px solid rgba(255, 255, 255, 0.05);
-            color: var(--text-muted);
-            font-size: 0.88rem;
-        }
-
-        /* --- RESPONSIVIDADE & MENU MOBILE --- */
-        @media (max-width: 900px) {
-            .location-container { grid-template-columns: 1fr; padding: 1.5rem; }
-            .hero-stats { gap: 1.5rem; }
-        }
-
-        @media (max-width: 768px) {
-            nav {
-                position: fixed;
-                top: 70px;
-                left: 0;
-                width: 100%;
-                background: rgba(5, 8, 17, 0.98);
-                backdrop-filter: blur(20px);
-                -webkit-backdrop-filter: blur(20px);
-                border-bottom: 1px solid var(--border);
-                padding: 2rem;
-                opacity: 0;
-                pointer-events: none;
-                transform: translateY(-10px);
-                will-change: transform, opacity;
-                transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
-            }
-
-            nav.active {
-                opacity: 1;
-                pointer-events: auto;
-                transform: translateY(0);
-            }
-
-            nav ul {
-                flex-direction: column;
-                align-items: center;
-                gap: 1.5rem;
-            }
-
-            .mobile-toggle {
-                display: block;
-            }
-
-            .header-cta {
-                display: none;
-            }
-
-            .hero h1 { font-size: 2.7rem; }
+        .gold-border-hover:hover {
+            border-color: #D4AF37;
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.15);
         }
     </style>
 </head>
-<body>
+<body class="bg-brand-dark text-gray-300 font-sans antialiased selection:bg-brand-gold selection:text-black">
 
-    <div class="bg-glow"></div>
-    <div class="bg-glow-2"></div>
+    <!-- NAVBAR -->
+    <nav id="navbar" class="fixed top-0 left-0 w-full z-50 transition-all duration-300 bg-brand-dark/80 backdrop-blur-md border-b border-neutral-800/50 py-4">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center">
+            <!-- Logo -->
+            <a href="#" class="flex items-center gap-2 group">
+                <i data-lucide="scissors" class="w-7 h-7 text-brand-gold transition-transform duration-300 group-hover:rotate-45"></i>
+                <span class="font-heading font-bold text-xl tracking-wider text-white">IMPÉRIO <span class="text-brand-gold">.</span></span>
+            </a>
 
-    <!-- HEADER / NAVBAR -->
-    <header>
-        <a href="#" class="logo">DEMO <span>BARBER</span></a>
-        
-        <nav id="nav-menu">
-            <ul>
-                <li><a href="#servicos" onclick="closeMenu()">Serviços</a></li>
-                <li><a href="#galeria" onclick="closeMenu()">Cortes</a></li>
-                <li><a href="#faq" onclick="closeMenu()">Dúvidas</a></li>
-                <li><a href="#localizacao" onclick="closeMenu()">Localização</a></li>
-            </ul>
-        </nav>
+            <!-- Desktop Menu -->
+            <div class="hidden md:flex items-center gap-8 text-sm font-medium">
+                <a href="#home" class="hover:text-brand-gold transition-colors">Início</a>
+                <a href="#servicos" class="hover:text-brand-gold transition-colors">Serviços</a>
+                <a href="#sobre" class="hover:text-brand-gold transition-colors">Sobre Nós</a>
+                <a href="#galeria" class="hover:text-brand-gold transition-colors">Galeria</a>
+                <a href="#equipe" class="hover:text-brand-gold transition-colors">Equipe</a>
+                <a href="#localizacao" class="hover:text-brand-gold transition-colors">Contato</a>
+            </div>
 
-        <div class="header-actions">
-            <a href="https://wa.me/5500000000000" target="_blank" rel="noopener" class="btn-cta header-cta">Agendar Horário</a>
-            <button class="mobile-toggle" onclick="toggleMenu()" aria-label="Abrir Menu">☰</button>
+            <!-- CTA Button Navbar -->
+            <div class="hidden md:block">
+                <a href="https://wa.me/5500000000000?text=Olá!%20Gostaria%20de%20agendar%20um%20horário." target="_blank" class="gold-gradient-bg text-black font-semibold px-5 py-2.5 rounded-sm hover:brightness-110 transition-all shadow-md hover:shadow-brand-gold/20 text-sm flex items-center gap-2">
+                    <i data-lucide="calendar" class="w-4 h-4"></i> Agendar Horário
+                </a>
+            </div>
+
+            <!-- Mobile Menu Button -->
+            <button id="mobile-menu-btn" class="md:hidden text-gray-300 hover:text-white focus:outline-none" aria-label="Abrir menu">
+                <i data-lucide="menu" class="w-7 h-7"></i>
+            </button>
         </div>
-    </header>
+
+        <!-- Mobile Menu Dropdown -->
+        <div id="mobile-menu" class="hidden md:hidden bg-brand-surface border-b border-neutral-800 px-4 pt-4 pb-6 space-y-4">
+            <a href="#home" class="block hover:text-brand-gold transition-colors py-1">Início</a>
+            <a href="#servicos" class="block hover:text-brand-gold transition-colors py-1">Serviços</a>
+            <a href="#sobre" class="block hover:text-brand-gold transition-colors py-1">Sobre Nós</a>
+            <a href="#galeria" class="block hover:text-brand-gold transition-colors py-1">Galeria</a>
+            <a href="#equipe" class="block hover:text-brand-gold transition-colors py-1">Equipe</a>
+            <a href="#localizacao" class="block hover:text-brand-gold transition-colors py-1">Contato</a>
+            <a href="https://wa.me/5500000000000?text=Olá!%20Gostaria%20de%20agendar%20um%20horário." target="_blank" class="gold-gradient-bg text-black font-semibold px-5 py-3 rounded-sm text-center block w-full">
+                Agendar Horário
+            </a>
+        </div>
+    </nav>
 
     <!-- HERO SECTION -->
-    <section class="hero">
-        <div class="hero-content reveal">
-            <div class="badge">
-                <span class="badge-dot"></span>
-                Atendimento Executivo & Visagismo
-            </div>
-            <h1>A excelência em cada detalhe do seu estilo.</h1>
-            <p>Na DEMO BARBER, alinhar o seu visual vai além do corte. Combinamos técnicas avançadas de visagismo com um ambiente exclusivo para homens de alto padrão.</p>
-            <a href="https://wa.me/5500000000000" target="_blank" rel="noopener" class="btn-cta" style="padding: 1rem 2.5rem; font-size: 1rem;">Garantir Meu Horário Exclusivo</a>
-
-            <!-- Social Proof -->
-            <div class="hero-stats">
-                <div class="stat-item">
-                    <h3>4.9 ★</h3>
-                    <p>Avaliação no Google</p>
-                </div>
-                <div class="stat-item">
-                    <h3>+5.000</h3>
-                    <p>Clientes Atendidos</p>
-                </div>
-                <div class="stat-item">
-                    <h3>100%</h3>
-                    <p>Precisão & Visagismo</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- SERVIÇOS & PREÇOS -->
-    <section id="servicos">
-        <div class="section-header reveal">
-            <h2>Nossos Serviços</h2>
-            <p>Invista na sua imagem com nossos tratamentos de alta precisão</p>
+    <section id="home" class="relative min-h-screen flex items-center justify-center pt-24 pb-16 overflow-hidden">
+        <!-- Background Overlay with Image -->
+        <div class="absolute inset-0 z-0">
+            <img src="https://images.unsplash.com/photo-1503951914875-452162b0f3f1?q=80&w=1920&auto=format&fit=crop" alt="Barbearia Fundo" class="w-full h-full object-cover object-center opacity-25">
+            <div class="absolute inset-0 bg-gradient-to-t from-brand-dark via-brand-dark/70 to-transparent"></div>
         </div>
 
-        <div class="services-grid">
-            <div class="service-card reveal delay-1">
-                <div class="service-header">
-                    <span class="service-title">Corte Executive</span>
-                    <span class="service-price">R$ 70</span>
-                </div>
-                <p class="service-desc">Consultoria de visagismo facial, lavagem especial com shampoo mentolado, corte preciso e finalização personalizada.</p>
-                <a href="https://wa.me/5500000000000?text=Olá,%20quero%20agendar%20um%20Corte%20Executive%20na%20DEMO%20BARBER" target="_blank" rel="noopener" class="service-btn">Agendar este serviço →</a>
+        <div class="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 text-center" data-aos="fade-up" data-aos-duration="1000">
+            <span class="inline-block uppercase tracking-[0.3em] text-xs sm:text-sm text-brand-gold font-semibold mb-4 border border-brand-gold/30 px-4 py-1.5 rounded-full bg-brand-gold/5">
+                Tradição & Modernidade
+            </span>
+            <h1 class="font-heading text-4xl sm:text-6xl md:text-7xl font-extrabold text-white leading-tight mb-6">
+                Mais que um corte, <br><span class="gold-gradient-text">uma experiência.</span>
+            </h1>
+            <p class="text-base sm:text-lg text-gray-400 max-w-2xl mx-auto mb-10 leading-relaxed">
+                Especialistas em visagismo masculino, cortes clássicos, modernos e barboterapia completa. Um ambiente exclusivo para quem valoriza seu estilo.
+            </p>
+            
+            <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                <a href="https://wa.me/5500000000000?text=Olá!%20Gostaria%20de%20agendar%20um%20horário." target="_blank" class="w-full sm:w-auto gold-gradient-bg text-black font-bold px-8 py-4 rounded-sm hover:brightness-110 transition-all shadow-lg hover:shadow-brand-gold/20 flex items-center justify-center gap-2 group">
+                    <i data-lucide="calendar" class="w-5 h-5 transition-transform group-hover:scale-110"></i> AGENDAR HORÁRIO
+                </a>
+                <a href="#servicos" class="w-full sm:w-auto border border-neutral-700 hover:border-brand-gold text-white font-medium px-8 py-4 rounded-sm transition-all hover:bg-neutral-900/50 flex items-center justify-center">
+                    VER SERVIÇOS
+                </a>
             </div>
 
-            <!-- Card Destaque Popular -->
-            <div class="service-card popular reveal delay-2">
-                <span class="popular-badge">Mais Pedido</span>
-                <div class="service-header">
-                    <span class="service-title">Combo DEMO</span>
-                    <span class="service-price">R$ 110</span>
-                </div>
-                <p class="service-desc">A experiência completa: Corte Executive + Barba Terapia completa com toalha quente e óleos essenciais.</p>
-                <a href="https://wa.me/5500000000000?text=Olá,%20quero%20agendar%20o%20Combo%20DEMO%20na%20DEMO%20BARBER" target="_blank" rel="noopener" class="service-btn">Agendar Experiência Completa →</a>
-            </div>
-
-            <div class="service-card reveal delay-3">
-                <div class="service-header">
-                    <span class="service-title">Barba Terapia</span>
-                    <span class="service-price">R$ 55</span>
-                </div>
-                <p class="service-desc">Modelagem e alinhamento com toalha quente, massagem facial e hidratação profunda dos fios.</p>
-                <a href="https://wa.me/5500000000000?text=Olá,%20quero%20agendar%20uma%20Barba%20Terapia%20na%20DEMO%20BARBER" target="_blank" rel="noopener" class="service-btn">Agendar este serviço →</a>
-            </div>
-
-            <div class="service-card reveal delay-1">
-                <div class="service-header">
-                    <span class="service-title">Acabamento / Pezinho</span>
-                    <span class="service-price">R$ 30</span>
-                </div>
-                <p class="service-desc">Manutenção rápida dos contornos do cabelo e nuca para manter o visual limpo no dia a dia.</p>
-                <a href="https://wa.me/5500000000000?text=Olá,%20quero%20agendar%20um%20Pezinho%20na%20DEMO%20BARBER" target="_blank" rel="noopener" class="service-btn">Agendar este serviço →</a>
-            </div>
-
-            <div class="service-card reveal delay-2">
-                <div class="service-header">
-                    <span class="service-title">Design de Sobrancelha</span>
-                    <span class="service-price">R$ 25</span>
-                </div>
-                <p class="service-desc">Alinhamento e limpeza sutil da sobrancelha na navalha mantendo o aspecto masculino natural.</p>
-                <a href="https://wa.me/5500000000000?text=Olá,%20quero%20agendar%20Design%20de%20Sobrancelha%20na%20DEMO%20BARBER" target="_blank" rel="noopener" class="service-btn">Agendar este serviço →</a>
-            </div>
-
-            <div class="service-card reveal delay-3">
-                <div class="service-header">
-                    <span class="service-title">Camuflagem / Selagem</span>
-                    <span class="service-price">R$ 90</span>
-                </div>
-                <p class="service-desc">Disfarce natural de fios brancos ou tratamento de alinhamento e redução de frizz para os cabelos.</p>
-                <a href="https://wa.me/5500000000000?text=Olá,%20quero%20agendar%20Selagem/Camuflagem%20na%20DEMO%20BARBER" target="_blank" rel="noopener" class="service-btn">Agendar este serviço →</a>
-            </div>
-        </div>
-    </section>
-
-    <!-- GALERIA DE CORTES -->
-    <section id="galeria">
-        <div class="section-header reveal">
-            <h2>Galeria de Cortes</h2>
-            <p>Inspire-se nos estilos realizados pelos nossos especialistas</p>
-        </div>
-
-        <div class="gallery-grid">
-            <div class="gallery-item reveal delay-1">
-                <img src="https://images.unsplash.com/photo-1503951914875-452162b0f3f1?auto=format&fit=crop&q=80&w=600" alt="Mid Fade Texturizado" loading="lazy">
-                <div class="gallery-overlay">
-                    <span class="gallery-tag">Mid Fade & Crop Texturizado</span>
-                </div>
-            </div>
-
-            <div class="gallery-item reveal delay-2">
-                <img src="https://images.unsplash.com/photo-1622286342621-4bd786c2447c?auto=format&fit=crop&q=80&w=600" alt="Barba Terapia DEMO" loading="lazy">
-                <div class="gallery-overlay">
-                    <span class="gallery-tag">Barba Esculpida & Alinhada</span>
-                </div>
-            </div>
-
-            <div class="gallery-item reveal delay-3">
-                <img src="https://images.unsplash.com/photo-1599351431202-1e0f0137899a?auto=format&fit=crop&q=80&w=600" alt="Corte Executivo Classico" loading="lazy">
-                <div class="gallery-overlay">
-                    <span class="gallery-tag">Executive Side Part</span>
-                </div>
-            </div>
-
-            <div class="gallery-item reveal delay-1">
-                <img src="https://images.unsplash.com/photo-1605497788044-5a32c7078486?auto=format&fit=crop&q=80&w=600" alt="Low Fade Sutil" loading="lazy">
-                <div class="gallery-overlay">
-                    <span class="gallery-tag">Low Taper Fade Moderno</span>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- FAQ (PERGUNTAS FREQUENTES) -->
-    <section id="faq">
-        <div class="section-header reveal">
-            <h2>Dúvidas Frequentes</h2>
-            <p>Tudo o que você precisa saber antes da sua visita</p>
-        </div>
-
-        <div class="faq-container reveal">
-            <div class="faq-item" onclick="toggleFaq(this)">
-                <div class="faq-question">
-                    <span>Preciso agendar horário ou posso ir direto?</span>
-                    <span class="faq-icon">+</span>
-                </div>
-                <div class="faq-answer-wrapper">
-                    <div class="faq-answer-content">
-                        Trabalhamos prioritariamente com agendamento para garantir um atendimento pontual e sem filas. No entanto, se houver disponibilidade no momento, também atendemos por ordem de chegada.
-                    </div>
-                </div>
-            </div>
-
-            <div class="faq-item" onclick="toggleFaq(this)">
-                <div class="faq-question">
-                    <span>Quais são as formas de pagamento aceitas?</span>
-                    <span class="faq-icon">+</span>
-                </div>
-                <div class="faq-answer-wrapper">
-                    <div class="faq-answer-content">
-                        Aceitamos PIX, cartões de crédito e débito (todas as bandeiras), além de pagamento em dinheiro.
-                    </div>
-                </div>
-            </div>
-
-            <div class="faq-item" onclick="toggleFaq(this)">
-                <div class="faq-question">
-                    <span>A DEMO BARBER possui estacionamento?</span>
-                    <span class="faq-icon">+</span>
-                </div>
-                <div class="faq-answer-wrapper">
-                    <div class="faq-answer-content">
-                        Sim! Contamos com convênio de estacionamento gratuito para clientes logo ao lado da unidade.
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- LOCALIZAÇÃO / CONTATO -->
-    <section id="localizacao">
-        <div class="section-header reveal">
-            <h2>Localização</h2>
-            <p>Ambiente climatizado, café espresso e cerveja gelada esperando por você</p>
-        </div>
-
-        <div class="location-container reveal">
-            <div class="location-info">
-                <div class="info-box">
-                    <h4>Unidade Principal</h4>
-                    <p>Av. Paulista, 1000 - Bela Vista<br>São Paulo - SP, 01310-100</p>
-                </div>
-
-                <div class="info-box">
-                    <h4>Horário de Atendimento</h4>
-                    <p>Segunda a Sábado: 09h às 20h<br>Domingo: Fechado</p>
-                </div>
-
-                <div class="info-box">
-                    <h4>Contato Direct</h4>
-                    <p>(11) 99999-9999 | contato@demobarber.com.br</p>
-                </div>
-
+            <!-- Highlights -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mt-16 pt-12 border-t border-neutral-800/80">
                 <div>
-                    <a href="https://maps.google.com" target="_blank" rel="noopener" class="btn-cta" style="border-radius: 12px; font-size: 0.88rem;">Traçar Rota no Google Maps</a>
+                    <h3 class="font-heading text-2xl font-bold text-white mb-1"><span class="gold-gradient-text">+5.000</span></h3>
+                    <p class="text-xs text-gray-400 uppercase tracking-wider">Clientes Atendidos</p>
                 </div>
-            </div>
-
-            <div class="map-wrapper">
-                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3657.1458292881146!2d-46.65428012379893!3d-23.563210261652136!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94ce59c8da0aa315%3A0xd59f9431f228976e!2sAv.%20Paulista%2C%201000%20-%20Bela%20Vista%2C%20S%C3%A3o%20Paulo%20-%20SP%2C%2001310-100!5e0!3m2!1spt-BR!2sbr!4v1700000000000!5m2!1spt-BR!2sbr" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                <div>
+                    <h3 class="font-heading text-2xl font-bold text-white mb-1"><span class="gold-gradient-text">10+</span></h3>
+                    <p class="text-xs text-gray-400 uppercase tracking-wider">Anos de Mercado</p>
+                </div>
+                <div>
+                    <h3 class="font-heading text-2xl font-bold text-white mb-1"><span class="gold-gradient-text">4.9/5</span></h3>
+                    <p class="text-xs text-gray-400 uppercase tracking-wider">Avaliação no Google</p>
+                </div>
+                <div>
+                    <h3 class="font-heading text-2xl font-bold text-white mb-1"><span class="gold-gradient-text">100%</span></h3>
+                    <p class="text-xs text-gray-400 uppercase tracking-wider">Satisfação</p>
+                </div>
             </div>
         </div>
     </section>
 
-    <!-- FLOATING WHATSAPP BUTTON -->
-    <a href="https://wa.me/5500000000000" target="_blank" rel="noopener" class="float-whatsapp" aria-label="Agendar via WhatsApp">
-        <svg viewBox="0 0 32 32">
-            <path d="M16 2a13.9 13.9 0 0 0-12 21l-2 7.3 7.5-2a13.9 13.9 0 1 0 6.5-26.3zm0 25.5a11.5 11.5 0 0 1-5.9-1.6l-.4-.2-4.4 1.2 1.2-4.3-.3-.4a11.6 11.6 0 1 1 9.8 5.3zm6.4-8.6c-.3-.2-2-.1-2.3-1.1s-.6-.8-.8-.8h-.7a1.4 1.4 0 0 0-1 .5 5.8 5.8 0 0 0-1.8 4.3 6.8 6.8 0 0 0 1.4 3.7c1.7 2.2 4 3.4 6.5 4.1 2.6.7 3.2.5 3.8.4a3.2 3.2 0 0 0 2.2-1.5 2.7 2.7 0 0 0 .2-1.5c-.1-.2-.4-.3-.8-.5z"/>
-        </svg>
-    </a>
+    <!-- SERVIÇOS E PREÇOS -->
+    <section id="servicos" class="py-20 bg-brand-surface border-y border-neutral-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-2xl mx-auto mb-16" data-aos="fade-up">
+                <h2 class="text-brand-gold font-semibold uppercase tracking-widest text-sm mb-2">Tabela de Serviços</h2>
+                <h3 class="font-heading text-3xl sm:text-4xl font-bold text-white">Nossos Cuidados Exclusivos</h3>
+                <div class="w-16 h-0.5 gold-gradient-bg mx-auto mt-4"></div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- Servico 1 -->
+                <div class="bg-brand-card p-6 rounded-lg border border-neutral-800 gold-border-hover flex justify-between items-center" data-aos="fade-up" data-aos-delay="100">
+                    <div class="space-y-1 pr-4">
+                        <div class="flex items-center gap-2">
+                            <i data-lucide="scissors" class="w-5 h-5 text-brand-gold"></i>
+                            <h4 class="font-heading text-lg font-bold text-white">Corte Império (Cabelo)</h4>
+                        </div>
+                        <p class="text-sm text-gray-400">Lavagem especial, diagnóstico capilar, corte na tesoura ou máquina e finalização com pomada.</p>
+                    </div>
+                    <div class="text-right whitespace-nowrap">
+                        <span class="text-xl font-bold font-heading text-brand-gold">R$ 60</span>
+                    </div>
+                </div>
+
+                <!-- Servico 2 -->
+                <div class="bg-brand-card p-6 rounded-lg border border-neutral-800 gold-border-hover flex justify-between items-center" data-aos="fade-up" data-aos-delay="200">
+                    <div class="space-y-1 pr-4">
+                        <div class="flex items-center gap-2">
+                            <i data-lucide="sparkles" class="w-5 h-5 text-brand-gold"></i>
+                            <h4 class="font-heading text-lg font-bold text-white">Barboterapia Premium</h4>
+                        </div>
+                        <p class="text-sm text-gray-400">Modelagem de barba, toalha quente, óleos essenciais, massagem facial e pós-barba hidratante.</p>
+                    </div>
+                    <div class="text-right whitespace-nowrap">
+                        <span class="text-xl font-bold font-heading text-brand-gold">R$ 50</span>
+                    </div>
+                </div>
+
+                <!-- Servico 3 -->
+                <div class="bg-brand-card p-6 rounded-lg border border-neutral-800 gold-border-hover flex justify-between items-center relative overflow-hidden" data-aos="fade-up" data-aos-delay="300">
+                    <span class="absolute top-0 right-0 gold-gradient-bg text-black text-[10px] font-bold px-2 py-0.5 rounded-bl">MAIS PEDIDO</span>
+                    <div class="space-y-1 pr-4">
+                        <div class="flex items-center gap-2">
+                            <i data-lucide="crown" class="w-5 h-5 text-brand-gold"></i>
+                            <h4 class="font-heading text-lg font-bold text-white">Combo Combo Royal (Cabelo + Barba)</h4>
+                        </div>
+                        <p class="text-sm text-gray-400">Experiência completa de corte e barba com direito a uma bebida do nosso bar exclusivo.</p>
+                    </div>
+                    <div class="text-right whitespace-nowrap">
+                        <span class="text-xl font-bold font-heading text-brand-gold">R$ 95</span>
+                    </div>
+                </div>
+
+                <!-- Servico 4 -->
+                <div class="bg-brand-card p-6 rounded-lg border border-neutral-800 gold-border-hover flex justify-between items-center" data-aos="fade-up" data-aos-delay="400">
+                    <div class="space-y-1 pr-4">
+                        <div class="flex items-center gap-2">
+                            <i data-lucide="zap" class="w-5 h-5 text-brand-gold"></i>
+                            <h4 class="font-heading text-lg font-bold text-white">Acabamento & Pezinho</h4>
+                        </div>
+                        <p class="text-sm text-gray-400">Alinhamento do contorno do cabelo e sobrancelha com navalha para manter o visual limpo.</p>
+                    </div>
+                    <div class="text-right whitespace-nowrap">
+                        <span class="text-xl font-bold font-heading text-brand-gold">R$ 30</span>
+                    </div>
+                </div>
+
+                <!-- Servico 5 -->
+                <div class="bg-brand-card p-6 rounded-lg border border-neutral-800 gold-border-hover flex justify-between items-center" data-aos="fade-up" data-aos-delay="500">
+                    <div class="space-y-1 pr-4">
+                        <div class="flex items-center gap-2">
+                            <i data-lucide="palette" class="w-5 h-5 text-brand-gold"></i>
+                            <h4 class="font-heading text-lg font-bold text-white">Camuflagem de Grisalhos</h4>
+                        </div>
+                        <p class="text-sm text-gray-400">Pigmentação sutil e natural para barba ou cabelo, disfarçando fios brancos com elegância.</p>
+                    </div>
+                    <div class="text-right whitespace-nowrap">
+                        <span class="text-xl font-bold font-heading text-brand-gold">R$ 45</span>
+                    </div>
+                </div>
+
+                <!-- Servico 6 -->
+                <div class="bg-brand-card p-6 rounded-lg border border-neutral-800 gold-border-hover flex justify-between items-center" data-aos="fade-up" data-aos-delay="600">
+                    <div class="space-y-1 pr-4">
+                        <div class="flex items-center gap-2">
+                            <i data-lucide="smile" class="w-5 h-5 text-brand-gold"></i>
+                            <h4 class="font-heading text-lg font-bold text-white">Corte Infantil (Até 12 anos)</h4>
+                        </div>
+                        <p class="text-sm text-gray-400">Atendimento paciente, divertido e com acabamento de excelência para os pequenos reis.</p>
+                    </div>
+                    <div class="text-right whitespace-nowrap">
+                        <span class="text-xl font-bold font-heading text-brand-gold">R$ 50</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SOBRE NÓS -->
+    <section id="sobre" class="py-20 relative overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <!-- Imagem Ilustrativa -->
+                <div class="relative" data-aos="fade-right">
+                    <div class="relative z-10 rounded-lg overflow-hidden border border-neutral-800 shadow-2xl">
+                        <img src="https://images.unsplash.com/photo-1585747860715-2ba37e788b70?q=80&w=1000&auto=format&fit=crop" alt="Ambiente Barbearia" class="w-full h-[450px] object-cover">
+                    </div>
+                    <div class="absolute -bottom-6 -right-6 w-48 h-48 gold-gradient-bg rounded-lg -z-0 opacity-20 blur-xl"></div>
+                </div>
+
+                <!-- Conteúdo Texto -->
+                <div class="space-y-6" data-aos="fade-left">
+                    <h2 class="text-brand-gold font-semibold uppercase tracking-widest text-sm">Sobre A Barbearia</h2>
+                    <h3 class="font-heading text-3xl sm:text-4xl font-bold text-white leading-tight">Um refúgio para o homem contemporâneo.</h3>
+                    <p class="text-gray-400 leading-relaxed">
+                        Fundada em 2016, a **Barbearia Império** nasceu da paixão pela arte do barbear clássico combinada com as tendências mais modernas do visagismo masculino. 
+                    </p>
+                    <p class="text-gray-400 leading-relaxed">
+                        Nosso espaço foi desenhado para ser mais do que um local de corte: é um ambiente de relaxamento, boa conversa, café de especialidade e chopp gelado. Aqui, cada detalhe importa.
+                    </p>
+                    <div class="grid grid-cols-2 gap-4 pt-4">
+                        <div class="flex items-center gap-3">
+                            <i data-lucide="check-circle-2" class="w-5 h-5 text-brand-gold flex-shrink-0"></i>
+                            <span class="text-sm font-medium text-white">Atendimento Personalizado</span>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <i data-lucide="check-circle-2" class="w-5 h-5 text-brand-gold flex-shrink-0"></i>
+                            <span class="text-sm font-medium text-white">Bar & Geladeira Exclusivos</span>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <i data-lucide="check-circle-2" class="w-5 h-5 text-brand-gold flex-shrink-0"></i>
+                            <span class="text-sm font-medium text-white">Produtos Premium</span>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <i data-lucide="check-circle-2" class="w-5 h-5 text-brand-gold flex-shrink-0"></i>
+                            <span class="text-sm font-medium text-white">Estacionamento Grátis</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- GALERIA DE FOTOS -->
+    <section id="galeria" class="py-20 bg-brand-surface border-y border-neutral-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-2xl mx-auto mb-16" data-aos="fade-up">
+                <h2 class="text-brand-gold font-semibold uppercase tracking-widest text-sm mb-2">Galeria</h2>
+                <h3 class="font-heading text-3xl sm:text-4xl font-bold text-white">Nossos Trabalhos & Espaço</h3>
+                <div class="w-16 h-0.5 gold-gradient-bg mx-auto mt-4"></div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+                <!-- Foto 1 -->
+                <div class="group relative overflow-hidden rounded-lg border border-neutral-800 aspect-square" data-aos="zoom-in" data-aos-delay="100">
+                    <img src="https://images.unsplash.com/photo-1622286342621-4bd786c2447c?q=80&w=600&auto=format&fit=crop" alt="Corte de Cabelo" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-6">
+                        <span class="text-white font-medium text-sm">Corte Moderno Fade</span>
+                    </div>
+                </div>
+                <!-- Foto 2 -->
+                <div class="group relative overflow-hidden rounded-lg border border-neutral-800 aspect-square" data-aos="zoom-in" data-aos-delay="200">
+                    <img src="https://images.unsplash.com/photo-1512690459411-b9245aed614b?q=80&w=600&auto=format&fit=crop" alt="Barboterapia" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-6">
+                        <span class="text-white font-medium text-sm">Modelagem de Barba</span>
+                    </div>
+                </div>
+                <!-- Foto 3 -->
+                <div class="group relative overflow-hidden rounded-lg border border-neutral-800 aspect-square" data-aos="zoom-in" data-aos-delay="300">
+                    <img src="https://images.unsplash.com/photo-1599351431202-1e0f0137899a?q=80&w=600&auto=format&fit=crop" alt="Detalhes Navalha" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-6">
+                        <span class="text-white font-medium text-sm">Acabamento na Navalha</span>
+                    </div>
+                </div>
+                <!-- Foto 4 -->
+                <div class="group relative overflow-hidden rounded-lg border border-neutral-800 aspect-square" data-aos="zoom-in" data-aos-delay="400">
+                    <img src="https://images.unsplash.com/photo-1503951914875-452162b0f3f1?q=80&w=600&auto=format&fit=crop" alt="Cadeira Barbearia" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-6">
+                        <span class="text-white font-medium text-sm">Ambiente Vintage & Premium</span>
+                    </div>
+                </div>
+                <!-- Foto 5 -->
+                <div class="group relative overflow-hidden rounded-lg border border-neutral-800 aspect-square" data-aos="zoom-in" data-aos-delay="500">
+                    <img src="https://images.unsplash.com/photo-1621605815971-fbc98d665033?q=80&w=600&auto=format&fit=crop" alt="Atendimento" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-6">
+                        <span class="text-white font-medium text-sm">Experiência VIP</span>
+                    </div>
+                </div>
+                <!-- Foto 6 -->
+                <div class="group relative overflow-hidden rounded-lg border border-neutral-800 aspect-square" data-aos="zoom-in" data-aos-delay="600">
+                    <img src="https://images.unsplash.com/photo-1517832606589-715069675377?q=80&w=600&auto=format&fit=crop" alt="Produtos" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-6">
+                        <span class="text-white font-medium text-sm">Linha Própria de Produtos</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- EQUIPE DE BARBEIROS -->
+    <section id="equipe" class="py-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-2xl mx-auto mb-16" data-aos="fade-up">
+                <h2 class="text-brand-gold font-semibold uppercase tracking-widest text-sm mb-2">Especialistas</h2>
+                <h3 class="font-heading text-3xl sm:text-4xl font-bold text-white">Nossa Equipe de Mestres</h3>
+                <div class="w-16 h-0.5 gold-gradient-bg mx-auto mt-4"></div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Barbeiro 1 -->
+                <div class="bg-brand-surface rounded-lg overflow-hidden border border-neutral-800 text-center gold-border-hover group" data-aos="fade-up" data-aos-delay="100">
+                    <div class="overflow-hidden h-72">
+                        <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=600&auto=format&fit=crop" alt="Carlos Silva" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
+                    </div>
+                    <div class="p-6">
+                        <h4 class="font-heading text-xl font-bold text-white">Carlos "Mestre" Silva</h4>
+                        <p class="text-brand-gold text-sm mb-3">Especialista em Visagismo & Tesoura</p>
+                        <p class="text-xs text-gray-400">Com mais de 12 anos de estrada, domina os cortes clássicos e barbas desenhadas.</p>
+                    </div>
+                </div>
+
+                <!-- Barbeiro 2 -->
+                <div class="bg-brand-surface rounded-lg overflow-hidden border border-neutral-800 text-center gold-border-hover group" data-aos="fade-up" data-aos-delay="200">
+                    <div class="overflow-hidden h-72">
+                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=600&auto=format&fit=crop" alt="Lucas Mendes" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
+                    </div>
+                    <div class="p-6">
+                        <h4 class="font-heading text-xl font-bold text-white">Lucas Mendes</h4>
+                        <p class="text-brand-gold text-sm mb-3">Mestre em Fade & Freestyle</p>
+                        <p class="text-xs text-gray-400">Referência em degradês perfeitos, alinhamento moderno e tendências urbanas.</p>
+                    </div>
+                </div>
+
+                <!-- Barbeiro 3 -->
+                <div class="bg-brand-surface rounded-lg overflow-hidden border border-neutral-800 text-center gold-border-hover group" data-aos="fade-up" data-aos-delay="300">
+                    <div class="overflow-hidden h-72">
+                        <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=600&auto=format&fit=crop" alt="Rafael Costa" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
+                    </div>
+                    <div class="p-6">
+                        <h4 class="font-heading text-xl font-bold text-white">Rafael Costa</h4>
+                        <p class="text-brand-gold text-sm mb-3">Especialista em Barboterapia</p>
+                        <p class="text-xs text-gray-400">Focado na saúde da pele e barba, proporcionando o ritual de relaxamento completo.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- DEPOIMENTOS -->
+    <section class="py-20 bg-brand-surface border-y border-neutral-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-2xl mx-auto mb-16" data-aos="fade-up">
+                <h2 class="text-brand-gold font-semibold uppercase tracking-widest text-sm mb-2">Avaliações</h2>
+                <h3 class="font-heading text-3xl sm:text-4xl font-bold text-white">O Que Dizem Nossos Clientes</h3>
+                <div class="w-16 h-0.5 gold-gradient-bg mx-auto mt-4"></div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Depoimento 1 -->
+                <div class="bg-brand-card p-6 rounded-lg border border-neutral-800 relative" data-aos="fade-up" data-aos-delay="100">
+                    <div class="flex text-brand-gold mb-4">
+                        <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                        <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                        <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                        <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                        <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                    </div>
+                    <p class="text-gray-300 text-sm mb-6 leading-relaxed">"Ambiente incomparável! O atendimento do Carlos foi impecável, acertou em cheio o estilo de barba que eu queria. Cerveja gelada de cortesia fecha com chave de ouro."</p>
+                    <div class="font-semibold text-white text-sm">Marcelo Oliveira</div>
+                    <div class="text-xs text-gray-500">Cliente há 2 anos</div>
+                </div>
+
+                <!-- Depoimento 2 -->
+                <div class="bg-brand-card p-6 rounded-lg border border-neutral-800 relative" data-aos="fade-up" data-aos-delay="200">
+                    <div class="flex text-brand-gold mb-4">
+                        <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                        <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                        <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                        <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                        <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                    </div>
+                    <p class="text-gray-300 text-sm mb-6 leading-relaxed">"A melhor barboterapia da cidade. A toalha quente e a massagem facial valem cada centavo. Saio renovado toda vez."</p>
+                    <div class="font-semibold text-white text-sm">Gabriel Santos</div>
+                    <div class="text-xs text-gray-500">Cliente VIP</div>
+                </div>
+
+                <!-- Depoimento 3 -->
+                <div class="bg-brand-card p-6 rounded-lg border border-neutral-800 relative" data-aos="fade-up" data-aos-delay="300">
+                    <div class="flex text-brand-gold mb-4">
+                        <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                        <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                        <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                        <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                        <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                    </div>
+                    <p class="text-gray-300 text-sm mb-6 leading-relaxed">"Agendamento fácil pelo WhatsApp, sem atrasos no atendimento. O degradê do Lucas é sensacional. Recomendo de olhos fechados."</p>
+                    <div class="font-semibold text-white text-sm">Rodrigo Lima</div>
+                    <div class="text-xs text-gray-500">Cliente há 6 meses</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- LOCALIZAÇÃO E HORÁRIOS -->
+    <section id="localizacao" class="py-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                <!-- Informações -->
+                <div class="space-y-8" data-aos="fade-right">
+                    <div>
+                        <h2 class="text-brand-gold font-semibold uppercase tracking-widest text-sm mb-2">Visite-nos</h2>
+                        <h3 class="font-heading text-3xl font-bold text-white">Onde Estamos & Horários</h3>
+                    </div>
+
+                    <div class="space-y-6">
+                        <!-- Endereço -->
+                        <div class="flex items-start gap-4">
+                            <div class="p-3 bg-brand-surface border border-neutral-800 rounded-lg text-brand-gold">
+                                <i data-lucide="map-pin" class="w-6 h-6"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-white font-semibold mb-1">Endereço</h4>
+                                <p class="text-gray-400 text-sm">Av. Paulista, 1000 - Bela Vista</p>
+                                <p class="text-gray-400 text-sm">São Paulo - SP, 01310-100</p>
+                            </div>
+                        </div>
+
+                        <!-- Horários -->
+                        <div class="flex items-start gap-4">
+                            <div class="p-3 bg-brand-surface border border-neutral-800 rounded-lg text-brand-gold">
+                                <i data-lucide="clock" class="w-6 h-6"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-white font-semibold mb-1">Horário de Funcionamento</h4>
+                                <p class="text-gray-400 text-sm">Segunda a Sexta: <span class="text-white font-medium">09h às 20h</span></p>
+                                <p class="text-gray-400 text-sm">Sábado: <span class="text-white font-medium">08h às 19h</span></p>
+                                <p class="text-gray-400 text-sm">Domingo: <span class="text-brand-gold font-medium">Fechado</span></p>
+                            </div>
+                        </div>
+
+                        <!-- Contato -->
+                        <div class="flex items-start gap-4">
+                            <div class="p-3 bg-brand-surface border border-neutral-800 rounded-lg text-brand-gold">
+                                <i data-lucide="phone" class="w-6 h-6"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-white font-semibold mb-1">Contato & Reservas</h4>
+                                <p class="text-gray-400 text-sm">Telefone: (11) 99999-8888</p>
+                                <p class="text-gray-400 text-sm">WhatsApp: (11) 99999-8888</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Mapa Placeholder / Embed -->
+                <div class="rounded-lg overflow-hidden border border-neutral-800 h-[380px] bg-brand-surface relative" data-aos="fade-left">
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3657.197573420803!2d-46.65489862375836!3d-23.5613495616086!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94ce59c8da0aa315%3A0xd59f9431f228c010!2sAv.%20Paulista%20-%20Bela%20Vista%2C%20S%C3%A3o%20Paulo%20-%20SP!5e0!3m2!1pt-BR!2sbr!4v1700000000000!5m2!1pt-BR!2sbr" width="100%" height="100%" style="border:0; filter: grayscale(100%) invert(92%) contrast(83%);" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FINAL CTA BANNER -->
+    <section class="py-16 gold-gradient-bg text-black relative overflow-hidden">
+        <div class="max-w-5xl mx-auto px-4 text-center relative z-10" data-aos="zoom-in">
+            <h2 class="font-heading text-3xl sm:text-5xl font-extrabold mb-4">Pronto para renovar seu visual?</h2>
+            <p class="text-black/80 max-w-xl mx-auto mb-8 font-medium text-base sm:text-lg">
+                Agende online em menos de 1 minuto. Garanta seu horário com nossos melhores especialistas.
+            </p>
+            <a href="https://wa.me/5500000000000?text=Olá!%20Gostaria%20de%20agendar%20um%20horário." target="_blank" class="bg-black text-white hover:bg-neutral-900 font-bold px-8 py-4 rounded-sm transition-all shadow-2xl inline-flex items-center gap-2">
+                <i data-lucide="message-square" class="w-5 h-5 text-brand-gold"></i> AGENDAR PELO WHATSAPP
+            </a>
+        </div>
+    </section>
 
     <!-- FOOTER -->
-    <footer>
-        <p>&copy; 2026 DEMO BARBER. Todos os direitos reservados. Design & Performance.</p>
+    <footer class="bg-black pt-16 pb-8 border-t border-neutral-800 text-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-10 mb-12">
+                <!-- Coluna 1: Marca -->
+                <div class="space-y-4 md:col-span-1">
+                    <a href="#" class="flex items-center gap-2">
+                        <i data-lucide="scissors" class="w-6 h-6 text-brand-gold"></i>
+                        <span class="font-heading font-bold text-lg text-white">IMPÉRIO</span>
+                    </a>
+                    <p class="text-gray-500 text-xs leading-relaxed">
+                        A barbearia definitiva para o homem moderno. Estilo, elegância e tradição em um só lugar.
+                    </p>
+                </div>
+
+                <!-- Coluna 2: Links Rápidos -->
+                <div>
+                    <h5 class="text-white font-semibold mb-4 font-heading">Navegação</h5>
+                    <ul class="space-y-2 text-gray-400 text-xs">
+                        <li><a href="#home" class="hover:text-brand-gold transition-colors">Início</a></li>
+                        <li><a href="#servicos" class="hover:text-brand-gold transition-colors">Serviços & Preços</a></li>
+                        <li><a href="#sobre" class="hover:text-brand-gold transition-colors">Sobre Nós</a></li>
+                        <li><a href="#galeria" class="hover:text-brand-gold transition-colors">Galeria de Fotos</a></li>
+                    </ul>
+                </div>
+
+                <!-- Coluna 3: Redes Sociais -->
+                <div>
+                    <h5 class="text-white font-semibold mb-4 font-heading">Redes Sociais</h5>
+                    <div class="flex gap-4">
+                        <a href="https://instagram.com" target="_blank" class="p-2 bg-brand-surface border border-neutral-800 rounded hover:border-brand-gold text-gray-400 hover:text-brand-gold transition-all" aria-label="Instagram">
+                            <i data-lucide="instagram" class="w-5 h-5"></i>
+                        </a>
+                        <a href="https://facebook.com" target="_blank" class="p-2 bg-brand-surface border border-neutral-800 rounded hover:border-brand-gold text-gray-400 hover:text-brand-gold transition-all" aria-label="Facebook">
+                            <i data-lucide="facebook" class="w-5 h-5"></i>
+                        </a>
+                        <a href="https://wa.me/5500000000000" target="_blank" class="p-2 bg-brand-surface border border-neutral-800 rounded hover:border-brand-gold text-gray-400 hover:text-brand-gold transition-all" aria-label="WhatsApp">
+                            <i data-lucide="message-circle" class="w-5 h-5"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Coluna 4: Contato Rápido -->
+                <div>
+                    <h5 class="text-white font-semibold mb-4 font-heading">Atendimento</h5>
+                    <p class="text-gray-400 text-xs mb-1">Segunda - Sábado: 09h - 20h</p>
+                    <p class="text-gray-400 text-xs mb-3">contato@barbeariaimperio.com.br</p>
+                    <span class="inline-block text-xs text-brand-gold border border-brand-gold/30 px-2 py-1 rounded bg-brand-gold/5">Atendimento sem fila</span>
+                </div>
+            </div>
+
+            <!-- Divisor -->
+            <div class="border-t border-neutral-900 pt-6 flex flex-col sm:flex-row justify-between items-center text-xs text-gray-600 gap-4">
+                <p>&copy; 2026 Barbearia Império. Todos os direitos reservados.</p>
+                <!-- Assinatura solicitada -->
+                <p class="text-gray-600 font-mono text-[11px]">Demonstração feita por Site express</p>
+            </div>
+        </div>
     </footer>
 
-    <!-- SCRIPTS LEVES DE INTERAÇÃO -->
+    <!-- BOTÃO FLUTUANTE DO WHATSAPP -->
+    <a href="https://wa.me/5500000000000?text=Olá!%20Gostaria%20de%20agendar%20um%20horário." target="_blank" class="fixed bottom-6 right-6 z-50 bg-emerald-600 hover:bg-emerald-500 text-white p-3.5 rounded-full shadow-2xl transition-all duration-300 hover:scale-110 flex items-center justify-center" aria-label="Contato via WhatsApp">
+        <i data-lucide="message-circle" class="w-7 h-7"></i>
+    </a>
+
+    <!-- SCRIPTS -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            // Observer configurado para não reagir a pequenas rolagens falsas
-            const observerOptions = {
-                root: null,
-                rootMargin: '0px',
-                threshold: 0.15
-            };
+        // Inicializa ícones Lucide
+        lucide.createIcons();
 
-            const observer = new IntersectionObserver((entries, obs) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('active');
-                        obs.unobserve(entry.target); // Para de observar após animar (economiza CPU)
-                    }
-                });
-            }, observerOptions);
-
-            document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+        // Inicializa animações AOS
+        AOS.init({
+            once: true,
+            duration: 800,
+            easing: 'ease-out-cubic'
         });
 
-        // Alternar Menu Mobile
-        const navMenu = document.getElementById('nav-menu');
-        function toggleMenu() {
-            navMenu.classList.toggle('active');
-        }
+        // Toggle Menu Mobile
+        const menuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
 
-        function closeMenu() {
-            navMenu.classList.remove('active');
-        }
+        menuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
 
-        // Toggle do FAQ Accordion
-        function toggleFaq(element) {
-            element.classList.toggle('active');
-        }
+        // Fechar menu mobile ao clicar em um link
+        document.querySelectorAll('#mobile-menu a').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('hidden');
+            });
+        });
+
+        // Efeito de sombra no Navbar ao rolar a página
+        window.addEventListener('scroll', () => {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('shadow-lg', 'bg-black/95');
+            } else {
+                navbar.classList.remove('shadow-lg', 'bg-black/95');
+            }
+        });
     </script>
 </body>
 </html>
